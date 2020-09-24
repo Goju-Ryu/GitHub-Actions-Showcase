@@ -37,3 +37,8 @@ jobs:
       - run: flutter test
       - run: flutter build appbundle --release
       - run: flutter build ios --release
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: releases
+          path: build/app/outputs/bundle/release/*
