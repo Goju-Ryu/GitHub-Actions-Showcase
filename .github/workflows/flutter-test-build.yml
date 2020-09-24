@@ -23,6 +23,19 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+
+    # cache files to reduce setup and compile types
+    - name: cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/.gradle/caches
+            **/.gradle/wrapper
+            **/.dart_tool
+          key: ${{ runner.os }}-flutter-debug-${{ hashFiles('**/*') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-debug-
+
     # Sets up a java environment on the vm
     - uses: actions/setup-java@v1.4.2
       with:
