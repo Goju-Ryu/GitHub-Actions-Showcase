@@ -5,6 +5,8 @@ name: flutter test-build
 # pull requests targeting master and "dispatch events" meaning someone manually activates it
 on:
   pull_request:
+
+  push:
     branches: [ master ]
     
   workflow_dispatch:
