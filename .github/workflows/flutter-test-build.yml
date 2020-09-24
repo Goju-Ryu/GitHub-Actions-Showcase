@@ -36,6 +36,6 @@ jobs:
     - run: flutter build ios --simulator --no-codesign
 
     - uses: actions/upload-artifact@v2
-        with:
-          name: debug
-          path: build/app/outputs/bundle/debug/*
+      with:
+        name: debug
+        path: build/app/outputs/bundle/debug/*
