@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+name: flutter build
+
+# Controls when the action will run. This workflow is triggered by
+# pull requests targeting master and "dispatch events" meaning someone manually activates it
+on:
+  push:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: macos-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Sets up a java environment on the vm
+      - uses: actions/setup-java@v1.4.2
+        with:
+          java-version: '12.x'
+
+      # Sets up flutter using the 1.20.4 version of the flutter sdk
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.20.4'
+
+      # Run some flutter commands, getting packages, running tests and build for android and iOS
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build appbundle --release
+      - run: flutter build ios --release
