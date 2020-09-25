@@ -31,7 +31,10 @@ jobs:
         path: |
           **/.gradle/caches
           **/.gradle/wrapper
+          **/flutter/.pub-cache
+          **/flutter/bin/cache
           **/.dart_tool
+          **/build/app/
         key: ${{ runner.os }}-flutter-debug-${{ hashFiles('**/*') }}
         restore-keys: |
           ${{ runner.os }}-flutter-debug-
