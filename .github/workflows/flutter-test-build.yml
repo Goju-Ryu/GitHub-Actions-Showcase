@@ -25,19 +25,24 @@ jobs:
     - uses: actions/checkout@v2
 
     # cache files to reduce setup and compile types
-    - name: cache
+    - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: /Users/runner/hostedtoolcache/flutter
+          key: ${{ runner.os }}-flutter-install-cache-${{ env.flutter_version }}
+
+    - name: cache build files
       uses: actions/cache@v2
       with:
         path: |
           **/.gradle/caches
           **/.gradle/wrapper
-          **/flutter/.pub-cache
-          **/flutter/bin/cache
           **/.dart_tool
           **/build/app/
         key: ${{ runner.os }}-flutter-debug-${{ hashFiles('**/*') }}
         restore-keys: |
           ${{ runner.os }}-flutter-debug-
+          ${{ runner.os }}-flutter-install-
 
     # Sets up a java environment on the vm
     - uses: actions/setup-java@v1.4.2
@@ -56,4 +61,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: debug
-        path: build/app/outputs/**/*.*
+        path: build/**/*.*
