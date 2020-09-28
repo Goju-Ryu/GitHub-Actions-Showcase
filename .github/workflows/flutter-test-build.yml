@@ -79,4 +79,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: debug
-        path: build/**/*.["app" | "apk" | "aab" ]
+        path: |
+          build/**/*.app
+          build/**/*.apk
+          build/**/*.aab
