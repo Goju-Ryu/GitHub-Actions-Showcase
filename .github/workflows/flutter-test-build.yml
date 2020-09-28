@@ -46,11 +46,11 @@ jobs:
 
     # cache files to reduce setup and compile types
     - name: Cache Flutter
-        id: cache-flutter
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.flutter_path }}
-          key: ${{ runner.os }}-flutter
+      id: cache-flutter
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.flutter_path }}
+        key: ${{ runner.os }}-flutter
 
     - name: cache build files
       uses: actions/cache@v2
