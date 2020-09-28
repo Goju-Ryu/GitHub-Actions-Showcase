@@ -11,25 +11,46 @@ on:
     
   workflow_dispatch:
 
+env:
+  flutter_path: /Users/runner/hostedtoolcache/flutter
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # This workflow contains two jobs called "setup" and "build"
+
+  # Sets up environment and install sdk's
+  setup:
+    runs-on:  macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.flutter_path }}
+          key: ${{ runner.os }}-flutter
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.20.4'
+
+  # Tests and builds the app for both android and iphone
   build:
     # The type of runner that the job will run on
     runs-on: macos-latest
-    
+    needs: setup
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
     # cache files to reduce setup and compile types
-    - name: Cache Flutter dependencies
-      uses: actions/cache@v2
-      with:
-        path: /Users/runner/hostedtoolcache/flutter
-        key: ${{ runner.os }}-flutter-install-cache-${{ env.flutter_version }}
+    - name: Cache Flutter
+        id: cache-flutter
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.flutter_path }}
+          key: ${{ runner.os }}-flutter
 
     - name: cache build files
       uses: actions/cache@v2
@@ -41,8 +62,8 @@ jobs:
           **/build/app/
         key: ${{ runner.os }}-flutter-debug-${{ hashFiles('**/*') }}
         restore-keys: |
-          ${{ runner.os }}-flutter-debug-
-          ${{ runner.os }}-flutter-install-
+          ${{ runner.os }}-flutter-debug-${{ hashFiles('**/*') }}
+
 
     # Sets up a java environment on the vm
     - uses: actions/setup-java@v1.4.2
@@ -61,4 +82,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: debug
-        path: build/**/*.*
+        path: build/**/*.("app" | "apk" | "aab" )
