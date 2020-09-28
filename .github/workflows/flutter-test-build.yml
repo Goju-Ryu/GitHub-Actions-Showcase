@@ -52,15 +52,6 @@ jobs:
         path: ${{ env.flutter_path }}
         key: ${{ runner.os }}-flutter
 
-    - name: cache build files
-      uses: actions/cache@v2
-      with:
-        path: |
-          **/build/**/
-        key: ${{ runner.os }}-flutter-debug
-        restore-keys: |
-          ${{ runner.os }}-flutter-debug
-
 
     # Sets up a java environment on the vm
     - uses: actions/setup-java@v1.4.2
