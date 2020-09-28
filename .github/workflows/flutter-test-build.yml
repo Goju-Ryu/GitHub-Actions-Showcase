@@ -73,7 +73,7 @@ jobs:
     # Run some flutter commands, getting packages, running tests and build for android and iOS
     - run: flutter pub get
     - run: flutter test
-    - run: flutter build appbundle
+    - run: flutter build apk
     - run: flutter build ios --simulator --no-codesign
 
     - uses: actions/upload-artifact@v2

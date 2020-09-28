@@ -36,9 +36,13 @@ jobs:
       - run: flutter pub get
       - run: flutter test
       - run: flutter build appbundle --release
+      - run: flutter build apk --release
       - run: flutter build ios --release --no-codesign
 
       - uses: actions/upload-artifact@v2
         with:
           name: releases
-          path: build/**/*.*
+          path: |
+            build/**/*.app
+            build/**/*.apk
+            build/**/*.aab
