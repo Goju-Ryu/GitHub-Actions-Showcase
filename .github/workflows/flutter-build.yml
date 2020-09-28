@@ -2,11 +2,8 @@
 name: flutter release-build
 
 # Controls when the action will run. This workflow is triggered by
-# pull requests targeting master and "dispatch events" meaning someone manually activates it
+# "dispatch events" meaning someone manually activates it
 on:
-  push:
-    branches: [ master ]
-
   workflow_dispatch:
 
 
@@ -46,3 +43,50 @@ jobs:
             build/**/*.app
             build/**/*.apk
             build/**/*.aab
+
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: releases
+          path: releases/
+
+
+      - name: Bump version and push tag
+        # MIT Licenced open source action for creating a new version tag
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: v
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          #          body: |   TODO figure out how to dynamically add a message (argument to workflow?)
+          #            Changes in this Release
+          #            - First Change
+          #            - Second Change
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: releases/
+  #            asset_name: my-artifact.zip
+  #            asset_content_type: application/
