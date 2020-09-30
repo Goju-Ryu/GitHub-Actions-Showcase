@@ -1,5 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-name: flutter release-build
+name: flutter build and release
 
 # Controls when the action will run. This workflow is triggered by
 # "dispatch events" meaning someone manually activates it
@@ -55,6 +55,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: releases
+          path: releases/
 
 
       - name: Bump version and push tag
@@ -88,5 +89,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: releases/
-  #            asset_name: my-artifact.zip
-  #            asset_content_type: application/
+          asset_name: app-builds.zip
+          asset_content_type: application/
