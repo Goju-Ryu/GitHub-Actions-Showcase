@@ -58,11 +58,11 @@ jobs:
           path: releases/
 
       - name: Archive Release
-          uses: thedoctor0/zip-release@master
-          with:
-            filename: 'release.zip'
-            path: releases/
-            exclusions: '*.git* /*node_modules/* .editorconfig'
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: 'release.zip'
+          path: releases/
+          exclusions: '*.git* /*node_modules/* .editorconfig'
 
 
         # MIT Licenced open source action for creating a new version tag
