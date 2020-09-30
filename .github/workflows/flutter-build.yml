@@ -58,14 +58,16 @@ jobs:
           path: releases/
 
 
-      - name: Bump version and push tag
         # MIT Licenced open source action for creating a new version tag
+      - name: Bump version and push tag
+        id: bump_version
         uses: anothrNick/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: v
 
       - name: Create Release
+        needs: bump_version
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -74,10 +76,6 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          #          body: |   TODO figure out how to dynamically add a message (argument to workflow?)
-          #            Changes in this Release
-          #            - First Change
-          #            - Second Change
           draft: false
           prerelease: false
 
